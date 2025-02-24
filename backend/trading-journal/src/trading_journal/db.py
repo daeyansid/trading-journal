@@ -1,5 +1,6 @@
 from sqlmodel import create_engine, SQLModel, Session
 from trading_journal import setting
+from trading_journal.models import User, TradingPlan, Account, TradingDailyBook, TradeDetails
 
 
 # engine is one for whole application

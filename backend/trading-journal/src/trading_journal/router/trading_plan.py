@@ -3,20 +3,20 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 from trading_journal.auth import current_user, get_user_from_db, hash_password, oauth_scheme
 from trading_journal.db import get_session
-from trading_journal.models import Register_User, User
+from trading_journal.models import Register_User, User, TradingDailyBook
 
-user_router = APIRouter(
-    prefix="/user",
-    tags=["user"],
-    responses={404: {"description": "Not found"}}
+trading_plan_router = APIRouter(
+    prefix="/trading-plan",
+    tags=["trading-plan"],
+    responses={404: {"description": "Trading Plan Not found"}}
 )
 
-@user_router.get("/")
+@trading_plan_router.get("/")
 async def read_user():
-    return {"message": "Welcome to Trading Daily Journal User Page"}
+    return {"message": "Welcome to Trading Daily Journal / Trading Plan Page"}
 
-@user_router.post("/register")
-async def regiser_user (new_user:Annotated[Register_User, Depends()],
+@trading_plan_router.post("/register")
+async def register_user (new_user:Annotated[Register_User, Depends()],
                         session:Annotated[Session, Depends(get_session)]):
     
     db_user = get_user_from_db(session, new_user.username, new_user.email)
@@ -31,6 +31,6 @@ async def regiser_user (new_user:Annotated[Register_User, Depends()],
     return {"message": f""" User with {user.username} successfully registered """}
 
 
-@user_router.get('/me')
+@trading_plan_router.get('/me')
 async def user_profile (current_user:Annotated[User, Depends(current_user)]):
     return current_user
