@@ -56,6 +56,12 @@ class Account(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
+class AccountCreate(BaseModel):
+    account_name: Annotated[str, Form()]
+    purpose: Annotated[str, Form()]
+    initial_account_balance: Annotated[float, Form()]
+    current_account_balance: Annotated[float, Form()]
+
 # trading daily book model
 class TradingDailyBook(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
