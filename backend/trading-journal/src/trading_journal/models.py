@@ -27,9 +27,21 @@ class TradingPlan(SQLModel, table=True):
     take_profit_pips: int
     status: str
     reason: str
+    user_id: int = Field(foreign_key="user.id")
     date: datetime = Field(default_factory=datetime.utcnow)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+
+
+
+
+
+
+
+
+
 
 # accounts model
 class Account(SQLModel, table=True):
