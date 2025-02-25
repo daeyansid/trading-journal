@@ -1,9 +1,9 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
-from trading_journal.auth import current_user, get_user_from_db, hash_password, oauth_scheme
+from trading_journal.auth import current_user
 from trading_journal.db import get_session
-from trading_journal.models import Register_User, User, TradingDailyBook
+from trading_journal.models import User, TradingPlan, TradingPlanCreate
 
 trading_plan_router = APIRouter(
     prefix="/trading-plan",
@@ -12,24 +12,36 @@ trading_plan_router = APIRouter(
 )
 
 @trading_plan_router.get("/")
-async def read_user():
+async def read_trading_plan():
     return {"message": "Welcome to Trading Daily Journal / Trading Plan Page"}
 
-@trading_plan_router.post("/register")
-async def register_user (new_user:Annotated[Register_User, Depends()],
-                        session:Annotated[Session, Depends(get_session)]):
+@trading_plan_router.post("/create")
+@trading_plan_router.post("/create")
+async def create_trading_plan(
+    trading_plan: Annotated[TradingPlanCreate, Depends()],
+    current_user: Annotated[User, Depends(current_user)],
+    session: Annotated[Session, Depends(get_session)]
+):
+    new_trading_plan = TradingPlan(
+        day=trading_plan.day,
+        account_balance=trading_plan.account_balance,
+        daily_target=trading_plan.daily_target,
+        required_lots=trading_plan.required_lots,
+        rounded_lots=trading_plan.rounded_lots,
+        risk_usd=trading_plan.risk_usd,
+        risk_percentage=trading_plan.risk_percentage,
+        stop_loss_pips=trading_plan.stop_loss_pips,
+        take_profit_pips=trading_plan.take_profit_pips,
+        status=trading_plan.status,
+        reason=trading_plan.reason,
+        user_id=current_user.id
+    )
     
-    db_user = get_user_from_db(session, new_user.username, new_user.email)
-    if db_user:
-        raise HTTPException(status_code=400, detail="User with these credentials already exists")
-    user = User(username = new_user.username,
-                email = new_user.email,
-                password = hash_password(new_user.password))
-    session.add(user)
+    session.add(new_trading_plan)
     session.commit()
-    session.refresh(user)
-    return {"message": f""" User with {user.username} successfully registered """}
-
+    session.refresh(new_trading_plan)
+    
+    return {"message": "Trading plan created successfully", "plan": new_trading_plan}
 
 @trading_plan_router.get('/me')
 async def user_profile (current_user:Annotated[User, Depends(current_user)]):

@@ -32,16 +32,18 @@ class TradingPlan(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-
-
-
-
-
-
-
-
-
-
+class TradingPlanCreate(BaseModel):
+    day: Annotated[str, Form()]
+    account_balance: Annotated[float, Form()]
+    daily_target: Annotated[float, Form()]
+    required_lots: Annotated[float, Form()]
+    rounded_lots: Annotated[float, Form()]
+    risk_usd: Annotated[float, Form()]
+    risk_percentage: Annotated[float, Form()]
+    stop_loss_pips: Annotated[int, Form()]
+    take_profit_pips: Annotated[int, Form()]
+    status: Annotated[str, Form()]
+    reason: Annotated[str, Form()]
 
 # accounts model
 class Account(SQLModel, table=True):
