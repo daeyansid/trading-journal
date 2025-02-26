@@ -35,5 +35,9 @@ async def register_user(
 
 
 @user_router.get('/me')
-async def user_profile (current_user:Annotated[User, Depends(current_user)]):
-    return current_user
+async def user_profile(current_user: Annotated[User, Depends(current_user)]):
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email
+    }

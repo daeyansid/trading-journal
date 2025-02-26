@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000';
+const API_URL = process.env.NEXT_PUBLIC_FAST_API_BACKEND_URL;;
 
 export const refreshTokenIfNeeded = async (): Promise<string | null> => {
     const refreshToken = localStorage.getItem('refreshToken');

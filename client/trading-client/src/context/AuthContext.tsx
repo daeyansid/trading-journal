@@ -9,7 +9,6 @@ type User = {
   id: string;
   username: string;
   email: string;
-  // Add other user properties as needed
 };
 
 type AuthContextType = {
@@ -82,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       // Get user info
       const userResponse = await axios.get(`${API_URL}/user/me`);
+      console.log("userResponse", userResponse);
       setUser(userResponse.data);
       return true;
     } catch (error) {

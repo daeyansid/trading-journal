@@ -34,11 +34,11 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white p-4 rounded shadow">
                   <p className="text-sm text-gray-500">Username</p>
-                  <p className="text-lg font-medium">{user.username}</p>
+                  <p className="text-lg font-medium text-black">{user.username || "Not Provided"}</p>
                 </div>
                 <div className="bg-white p-4 rounded shadow">
                   <p className="text-sm text-gray-500">Email</p>
-                  <p className="text-lg font-medium">{user.email || "Not provided"}</p>
+                  <p className="text-lg font-medium text-black">{user.email || "Not Provided"}</p>
                 </div>
               </div>
             </div>
