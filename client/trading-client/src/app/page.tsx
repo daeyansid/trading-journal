@@ -1,21 +1,12 @@
 "use client";
 
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
 export default function Home() {
   const { user, isLoading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login');
-    }
-  }, [user, isLoading, router]);
-
+  
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -24,81 +15,97 @@ export default function Home() {
     );
   }
 
-  if (!user) {
-    return null; // Will redirect in useEffect
-  }
-
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
 
       <main className="max-w-6xl mx-auto mt-10 px-4 sm:px-6">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div>
+        {user ? (
+          // Authenticated user view
+          <div>
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
               <h1 className="text-3xl font-bold text-gray-800">Trading Journal Dashboard</h1>
               <p className="mt-2 text-gray-600">Track, analyze, and improve your trading performance</p>
-            </div>
-            <div className="mt-4 md:mt-0">
               <span className="text-sm text-gray-500">Last login: {new Date().toLocaleDateString()}</span>
             </div>
+
+            <div className="bg-white p-6 rounded-lg shadow mb-8">
+              <h2 className="text-xl font-semibold mb-4">Welcome, {user.username}!</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white p-4 rounded shadow">
+                  <p className="text-sm text-gray-500">Username</p>
+                  <p className="text-lg font-medium">{user.username}</p>
+                </div>
+                <div className="bg-white p-4 rounded shadow">
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="text-lg font-medium">{user.email || "Not provided"}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <Link href="/accounts" className="block">
+                <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500 hover:shadow-lg transition-shadow">
+                  <h3 className="font-bold text-lg">Accounts</h3>
+                  <p className="text-gray-600 text-sm">Manage your trading accounts and balances</p>
+                  <div className="mt-4 text-blue-600 text-sm font-medium">View Accounts →</div>
+                </div>
+              </Link>
+
+              <Link href="/trading-plan" className="block">
+                <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 hover:shadow-lg transition-shadow">
+                  <h3 className="font-bold text-lg">Trading Plans</h3>
+                  <p className="text-gray-600 text-sm">Create and manage your trading strategies</p>
+                  <div className="mt-4 text-green-600 text-sm font-medium">View Plans →</div>
+                </div>
+              </Link>
+
+              <Link href="/daily-book" className="block">
+                <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500 hover:shadow-lg transition-shadow">
+                  <h3 className="font-bold text-lg">Daily Trades</h3>
+                  <p className="text-gray-600 text-sm">Record and review your daily trading activities</p>
+                  <div className="mt-4 text-purple-600 text-sm font-medium">View Trades →</div>
+                </div>
+              </Link>
+            </div>
           </div>
-        </div>
-
-        <div className="bg-blue-50 p-6 rounded-lg shadow mb-8">
-          <h2 className="text-xl font-semibold mb-4">Welcome, {user.username}!</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white p-4 rounded shadow">
-              <p className="text-sm text-gray-500">Username</p>
-              <p className="text-lg font-medium">{user.username}</p>
+        ) : (
+          // Public home page for non-authenticated users
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-extrabold text-gray-800 mb-4">Trading Journal</h1>
+              <p className="text-xl text-gray-600 max-w-2xl">
+                Your all-in-one solution for tracking, analyzing, and improving your trading performance
+              </p>
             </div>
-            <div className="bg-white p-4 rounded shadow">
-              <p className="text-sm text-gray-500">Email</p>
-              <p className="text-lg font-medium">{user.email || "Not provided"}</p>
+
+            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500 text-center">
+                <h3 className="text-xl font-bold mb-2">Track Trades</h3>
+                <p className="text-gray-600">Record and monitor all your trades in one place</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 text-center">
+                <h3 className="text-xl font-bold mb-2">Create Plans</h3>
+                <p className="text-gray-600">Develop and stick to your trading strategies</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500 text-center">
+                <h3 className="text-xl font-bold mb-2">Analyze Performance</h3>
+                <p className="text-gray-600">Gain insights from your trading history</p>
+              </div>
+            </div>
+
+            <div className="mt-12 flex justify-center gap-4">
+              <Link href="/login" className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors">
+                Sign In
+              </Link>
+              <Link href="/register" className="px-6 py-3 bg-white text-blue-600 font-medium rounded-md border border-blue-600 hover:bg-blue-100 transition-colors">
+                Register
+              </Link>
             </div>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Link href="/accounts" className="block">
-            <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500 hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-lg">Accounts</h3>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-              </div>
-              <p className="text-gray-600 text-sm">Manage your trading accounts and balances</p>
-              <div className="mt-4 text-blue-600 text-sm font-medium">View Accounts →</div>
-            </div>
-          </Link>
-
-          <Link href="/trading-plan" className="block">
-            <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-lg">Trading Plans</h3>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <p className="text-gray-600 text-sm">Create and manage your trading strategies</p>
-              <div className="mt-4 text-green-600 text-sm font-medium">View Plans →</div>
-            </div>
-          </Link>
-
-          <Link href="/daily-book" className="block">
-            <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500 hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-lg">Daily Trades</h3>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-              </div>
-              <p className="text-gray-600 text-sm">Record and review your daily trading activities</p>
-              <div className="mt-4 text-purple-600 text-sm font-medium">View Trades →</div>
-            </div>
-          </Link>
-        </div>
+        )}
       </main>
     </div>
   );
