@@ -112,12 +112,5 @@ class Token (BaseModel):
 class TokenData (BaseModel):
         username:str
 
-# class Todo_Create (BaseModel):
-#     content: str
-
-# class Todo_Edit (BaseModel):
-#     content:str
-#     is_completed: bool
-
 class RefreshTokenData (BaseModel):
     email:str

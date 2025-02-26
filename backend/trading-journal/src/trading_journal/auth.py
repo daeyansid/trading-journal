@@ -71,8 +71,8 @@ def current_user(token: Annotated[str, Depends(oauth_scheme)], session: Annotate
     )
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, ALGORITHYM)
-        username: str | None = payload.get("username")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHYM])
+        username: str | None = payload.get("sub")
         if username is None:
             raise credential_exception
         token_data = TokenData(username=username)
@@ -105,14 +105,15 @@ def validate_refresh_token(token: str, session: Annotated[Session, Depends(get_s
     )
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, ALGORITHYM)
-        email: str | None = payload.get("username")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHYM])
+        email: str | None = payload.get("sub")
         if email is None:
             raise credential_exception
         token_data = RefreshTokenData(email=email)
 
-    except:
-        raise JWTError
+    except JWTError:
+        raise credential_exception
+
     user = get_user_from_db(session, email=token_data.email)
     if not user:
         raise credential_exception

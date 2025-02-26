@@ -46,10 +46,12 @@ async def login(form_data:Annotated[OAuth2PasswordRequestForm, Depends()],
         raise HTTPException(status_code=401, detail="Invalid username or password")
     
     expire_time = timedelta(minutes=EXPIRY_TIME)
-    access_token = create_access_token({"sub": user.id, "username": form_data.username, "email": user.email}, expire_time)
+    # Use username as the subject ("sub") for consistent validation
+    access_token = create_access_token({"sub": user.username}, expire_time)
 
     refresh_expire_time = timedelta(days=7)
-    refresh_token = create_refresh_token({"username":user.email}, refresh_expire_time)
+    # Use email as the subject for refresh token
+    refresh_token = create_refresh_token({"sub": user.email}, refresh_expire_time)
 
     return Token(access_token=access_token, token_type="bearer", refresh_token=refresh_token)
 
@@ -67,9 +69,11 @@ def refresh_token(old_refresh_token:str, session:Annotated[Session, Depends(get_
         raise credential_exception
     
     expire_time = timedelta(minutes=EXPIRY_TIME)
-    access_token = create_access_token({"username":user.username}, expire_time)
+    # Use username as the subject for consistent validation
+    access_token = create_access_token({"sub": user.username}, expire_time)
 
     refresh_expire_time = timedelta(days=7)
-    refresh_token = create_refresh_token({"username":user.email}, refresh_expire_time)
+    # Use email as the subject for refresh token
+    refresh_token = create_refresh_token({"sub": user.email}, refresh_expire_time)
 
     return Token(access_token=access_token, token_type= "bearer", refresh_token=refresh_token)
