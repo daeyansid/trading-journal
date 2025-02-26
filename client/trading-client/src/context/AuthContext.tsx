@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 // Define types for authentication
 type User = {
@@ -14,18 +15,25 @@ type User = {
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
-  login: (username: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  login: (username: string, password: string) => Promise<boolean>;
+  register: (username: string, email: string, password: string) => Promise<boolean>;
+  logout: () => void;
 };
 
-const API_URL = process.env.FAST_API_BACKEND_URL;
+const API_URL = process.env.NEXT_PUBLIC_FAST_API_BACKEND_URL;
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  isLoading: true,
+  login: async () => false,
+  logout: () => {},
+  register: async () => false,
+});
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   // Check if user is logged in on initial load
   useEffect(() => {
@@ -54,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkLoggedIn();
   }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
       // Create form data for OAuth2 password flow
@@ -73,14 +81,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       
       // Get user info
-      const userResponse = await axios.get(`${API_URL}/users/me`);
+      const userResponse = await axios.get(`${API_URL}/user/me`);
       setUser(userResponse.data);
+      return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async (username: string, email: string, password: string) => {
+  const register = async (username: string, email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
       // Register user
@@ -92,12 +104,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       // After registration, login with the new credentials
       await login(username, password);
+      return true;
+    } catch (error) {
+      console.error('Registration error:', error);
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = async () => {
+  const logout = () => {
     setIsLoading(true);
     try {
       // No need to call backend for logout with token-based auth
@@ -115,6 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Clear user state
       setUser(null);
       setIsLoading(false);
+      router.push('/');
     }
   };
 

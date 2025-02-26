@@ -1,28 +1,45 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-// This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token')?.value
-  const path = request.nextUrl.pathname
+  // This checks if the URL is for a protected route
+  const isProtectedRoute = 
+    request.nextUrl.pathname.startsWith('/accounts') ||
+    request.nextUrl.pathname.startsWith('/trading-plan') ||
+    request.nextUrl.pathname.startsWith('/daily-book') ||
+    request.nextUrl.pathname.startsWith('/trade-record') ||
+    request.nextUrl.pathname.startsWith('/dashboard');
   
-  // Public paths that don't require authentication
-  const publicPaths = ['/login', '/register']
+  // Get stored auth token (if any)
+  const user = request.cookies.get('user')?.value;
   
-  // If accessing a protected route without a token, redirect to login
-  if (!token && !publicPaths.includes(path)) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Allow home page to be accessed without authentication
+  if (request.nextUrl.pathname === '/') {
+    return NextResponse.next();
   }
   
-  // If accessing login/register with a token, redirect to home page
-  if (token && publicPaths.includes(path)) {
-    return NextResponse.redirect(new URL('/', request.url))
+  // Redirect to login if trying to access protected route without auth
+  if (isProtectedRoute && !user) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
   
-  return NextResponse.next()
+  // Redirect to home if trying to access login/register while already logged in
+  if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register') && user) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+  
+  return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-}
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+  ],
+};
