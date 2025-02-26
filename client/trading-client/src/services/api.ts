@@ -33,18 +33,21 @@ export const fetchWithAuth = async (
     url: string,
     options: RequestInit = {}
 ): Promise<Response> => {
-    // Get token from localStorage
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem('access_token');
 
-    // Set up headers
+    if (!token) {
+        // Redirect to login instead of throwing error
+        window.location.href = '/login';
+        return new Promise((_, reject) => 
+            reject(new Error('Authentication required'))
+        );
+    }
+
     const headers: Record<string, string> = {
         ...options.headers as Record<string, string>,
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
     };
-
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
 
     // Attempt the request
     let response = await fetch(`${API_URL}${url}`, {
@@ -62,6 +65,9 @@ export const fetchWithAuth = async (
                 ...options,
                 headers,
             });
+        } else {
+            // Redirect to login if refresh failed
+            window.location.href = '/login';
         }
     }
 

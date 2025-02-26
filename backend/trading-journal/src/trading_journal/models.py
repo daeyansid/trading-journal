@@ -25,25 +25,25 @@ class TradingPlan(SQLModel, table=True):
     risk_percentage: float = Field(decimal_places=2)
     stop_loss_pips: int
     take_profit_pips: int
-    status: str
-    reason: str
+    status: Optional[str] = None
+    reason: Optional[str] = None
     user_id: int = Field(foreign_key="user.id")
     date: datetime = Field(default_factory=datetime.utcnow)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class TradingPlanCreate(BaseModel):
-    day: Annotated[str, Form()]
-    account_balance: Annotated[float, Form()]
-    daily_target: Annotated[float, Form()]
-    required_lots: Annotated[float, Form()]
-    rounded_lots: Annotated[float, Form()]
-    risk_usd: Annotated[float, Form()]
-    risk_percentage: Annotated[float, Form()]
-    stop_loss_pips: Annotated[int, Form()]
-    take_profit_pips: Annotated[int, Form()]
-    status: Annotated[str, Form()]
-    reason: Annotated[str, Form()]
+    day: str
+    account_balance: float
+    daily_target: float 
+    required_lots: float
+    rounded_lots: float
+    risk_usd: float
+    risk_percentage: float
+    stop_loss_pips: int
+    take_profit_pips: int
+    status: Optional[str] = None
+    reason: Optional[str] = None
 
 # accounts model
 class Account(SQLModel, table=True):
