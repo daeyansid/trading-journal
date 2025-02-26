@@ -81,17 +81,17 @@ export default function Home() {
 
             <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500 text-center">
-                <h3 className="text-xl font-bold mb-2">Track Trades</h3>
+                <h3 className="text-xl font-bold mb-2 text-black">Track Trades</h3>
                 <p className="text-black">Record and monitor all your trades in one place</p>
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 text-center">
-                <h3 className="text-xl font-bold mb-2">Create Plans</h3>
+                <h3 className="text-xl font-bold mb-2 text-black">Create Plans</h3>
                 <p className="text-black">Develop and stick to your trading strategies</p>
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500 text-center">
-                <h3 className="text-xl font-bold mb-2">Analyze Performance</h3>
+                <h3 className="text-xl font-bold mb-2 text-black">Analyze Performance</h3>
                 <p className="text-black">Gain insights from your trading history</p>
               </div>
             </div>
