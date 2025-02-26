@@ -25,7 +25,7 @@ export default function Home() {
           <div>
             <div className="bg-white rounded-lg shadow-md p-6 mb-8">
               <h1 className="text-3xl font-bold text-gray-800">Trading Journal Dashboard</h1>
-              <p className="mt-2 text-gray-600">Track, analyze, and improve your trading performance</p>
+              <p className="mt-2 text-black">Track, analyze, and improve your trading performance</p>
               <span className="text-sm text-gray-500">Last login: {new Date().toLocaleDateString()}</span>
             </div>
 
@@ -46,24 +46,24 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <Link href="/accounts" className="block">
                 <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500 hover:shadow-lg transition-shadow">
-                  <h3 className="font-bold text-lg">Accounts</h3>
-                  <p className="text-gray-600 text-sm">Manage your trading accounts and balances</p>
+                  <h3 className="font-bold text-lg text-black">Accounts</h3>
+                  <p className="text-black text-sm">Manage your trading accounts and balances</p>
                   <div className="mt-4 text-blue-600 text-sm font-medium">View Accounts →</div>
                 </div>
               </Link>
 
               <Link href="/trading-plan" className="block">
                 <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 hover:shadow-lg transition-shadow">
-                  <h3 className="font-bold text-lg">Trading Plans</h3>
-                  <p className="text-gray-600 text-sm">Create and manage your trading strategies</p>
+                  <h3 className="font-bold text-lg text-black">Trading Plans</h3>
+                  <p className="text-black text-sm">Create and manage your trading strategies</p>
                   <div className="mt-4 text-green-600 text-sm font-medium">View Plans →</div>
                 </div>
               </Link>
 
               <Link href="/daily-book" className="block">
                 <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500 hover:shadow-lg transition-shadow">
-                  <h3 className="font-bold text-lg">Daily Trades</h3>
-                  <p className="text-gray-600 text-sm">Record and review your daily trading activities</p>
+                  <h3 className="font-bold text-lg text-black">Daily Trades</h3>
+                  <p className="text-black text-sm">Record and review your daily trading activities</p>
                   <div className="mt-4 text-purple-600 text-sm font-medium">View Trades →</div>
                 </div>
               </Link>
@@ -74,7 +74,7 @@ export default function Home() {
           <div className="flex flex-col items-center justify-center py-12">
             <div className="text-center mb-12">
               <h1 className="text-4xl font-extrabold text-gray-800 mb-4">Trading Journal</h1>
-              <p className="text-xl text-gray-600 max-w-2xl">
+              <p className="text-xl text-black max-w-2xl">
                 Your all-in-one solution for tracking, analyzing, and improving your trading performance
               </p>
             </div>
@@ -82,17 +82,17 @@ export default function Home() {
             <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500 text-center">
                 <h3 className="text-xl font-bold mb-2">Track Trades</h3>
-                <p className="text-gray-600">Record and monitor all your trades in one place</p>
+                <p className="text-black">Record and monitor all your trades in one place</p>
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 text-center">
                 <h3 className="text-xl font-bold mb-2">Create Plans</h3>
-                <p className="text-gray-600">Develop and stick to your trading strategies</p>
+                <p className="text-black">Develop and stick to your trading strategies</p>
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500 text-center">
                 <h3 className="text-xl font-bold mb-2">Analyze Performance</h3>
-                <p className="text-gray-600">Gain insights from your trading history</p>
+                <p className="text-black">Gain insights from your trading history</p>
               </div>
             </div>
 

@@ -27,11 +27,12 @@ export default function Login() {
     setIsLoading(true);
     
     try {
-      await login(username, password);
-      // The redirection is handled by the useEffect above
+      const result = await login(username, password);
+      if (!result.success) {
+        setError(result.error || 'Failed to login');
+      }
     } catch (err) {
-      setError('Failed to login. Please check your credentials.');
-      console.error('Login error:', err);
+      setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }

@@ -29,9 +29,11 @@ export default function Register() {
             return;
         }
 
-        const success = await register(username, email, password);
-        if (success) {
+        const result = await register(username, email, password);
+        if (result.success) {
             router.push('/login');
+        } else {
+            setError(result.error || 'Registration failed. Please try again.');
         }
     };
 
