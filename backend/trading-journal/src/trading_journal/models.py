@@ -50,6 +50,7 @@ class Account(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     account_name: str
     purpose: str
+    broker: str
     initial_account_balance: float = Field(decimal_places=2)
     current_account_balance: float = Field(decimal_places=2)
     user_id: int = Field(foreign_key="user.id")
@@ -59,6 +60,7 @@ class Account(SQLModel, table=True):
 class AccountCreate(BaseModel):
     account_name: Annotated[str, Form()]
     purpose: Annotated[str, Form()]
+    broker: Annotated[str, Form()]
     initial_account_balance: Annotated[float, Form()]
     current_account_balance: Annotated[float, Form()]
 

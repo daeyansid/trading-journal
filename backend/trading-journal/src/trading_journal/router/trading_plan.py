@@ -24,7 +24,7 @@ async def read_trading_plan():
 
 @trading_plan_router.post("/create")
 async def create_trading_plan(
-    trading_plan: TradingPlanCreate,  # Remove the Depends() since we're getting JSON data
+    trading_plan: TradingPlanCreate,
     current_user: Annotated[User, Depends(current_user)],
     session: Annotated[Session, Depends(get_session)]
 ):
